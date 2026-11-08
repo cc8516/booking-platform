@@ -49,7 +49,8 @@ src/
   pages/                   HomePage, HotelsPage, AddHotelPage (admin only), BookingsPage (protected), AuthCallbackPage
   components/Header.tsx    Nav + sign in/out
   data/hotels.ts           Seed hotel data (replace with .NET API)
-  types/hotel.ts           Hotel type
+  types/hotel.ts           Hotel / NewHotel types (optional `imageUrl`)
+  utils/image.ts           Validates (JPEG/PNG/WebP, ≤5 MB) and downsizes photos to ≤1024px JPEG data URLs
 ```
 
 ## Auth flow
@@ -64,7 +65,7 @@ Routes: `/` home, `/hotels` list, `/hotels/new` (Admin group only), `/bookings` 
 
 ## Roles
 
-Roles come from the id token's `cognito:groups` claim (parsed into `AuthUser.groups`). `useAuth()` exposes `isAdmin` and `isHotelManager`. Admins see "+ Add hotel" on `/hotels` and can open `/hotels/new`. Hotel Manager has no features yet beyond a header badge. These checks are UI-only — the .NET API must enforce groups too. Group changes only take effect after the user signs in again (new token). Hotels added in the UI are stored in `localStorage` until the API exists.
+Roles come from the id token's `cognito:groups` claim (parsed into `AuthUser.groups`). `useAuth()` exposes `isAdmin` and `isHotelManager`. Admins see "+ Add hotel" on `/hotels` and can open `/hotels/new`. Hotel Manager has no features yet beyond a header badge. These checks are UI-only — the .NET API must enforce groups too. Group changes only take effect after the user signs in again (new token). Hotels added in the UI (including their photo, stored as a downsized data URL) are kept in `localStorage` until the API exists.
 
 ## Conventions
 
@@ -79,4 +80,5 @@ Roles come from the id token's `cognito:groups` claim (parsed into `AuthUser.gro
 - Implicit Grant is deprecated for SPAs; consider Authorization Code + PKCE (change is confined to `cognito.ts` and `AuthCallbackPage.tsx`).
 - Tokens are decoded but not signature-verified client-side; the backend must validate them.
 - Booking flow and API client not yet implemented; hotel add is local-only (`HotelsProvider.addHotel` → replace with POST to the API).
+- Photos live in `localStorage` (~5 MB total quota); a full quota silently stops persisting. Move to S3 (presigned upload URL from the API) with the backend.
 - Hotel Manager role has no permissions defined yet.

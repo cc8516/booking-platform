@@ -1,6 +1,7 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useHotels } from '../hotels/useHotels';
+import { ACCEPTED_IMAGE_TYPES, processImage } from '../utils/image';
 
 interface FormState {
   name: string;
@@ -20,9 +21,26 @@ export function AddHotelPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState<FormState>(emptyForm);
   const [error, setError] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | undefined>();
+  const [imageLoading, setImageLoading] = useState(false);
 
   const update = (field: keyof FormState) => (e: { target: { value: string } }) =>
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
+
+  const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // allow re-selecting the same file
+    if (!file) return;
+    setError(null);
+    setImageLoading(true);
+    try {
+      setImageUrl(await processImage(file));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not load image.');
+    } finally {
+      setImageLoading(false);
+    }
+  };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -42,6 +60,7 @@ export function AddHotelPage() {
       pricePerNight: price,
       rating,
       description: form.description.trim(),
+      imageUrl,
     });
     navigate('/hotels');
   };
@@ -62,9 +81,21 @@ export function AddHotelPage() {
         <label>Description
           <textarea rows={3} value={form.description} onChange={update('description')} />
         </label>
+        <label>Photo
+          <input type="file" accept={ACCEPTED_IMAGE_TYPES.join(',')} onChange={handleImageChange} />
+        </label>
+        {imageLoading && <p className="muted">Processing image…</p>}
+        {imageUrl && (
+          <div className="photo-preview">
+            <img src={imageUrl} alt="Hotel preview" />
+            <button type="button" className="secondary" onClick={() => setImageUrl(undefined)}>
+              Remove photo
+            </button>
+          </div>
+        )}
         {error && <p className="error">{error}</p>}
         <div className="form-actions">
-          <button type="submit">Save hotel</button>
+          <button type="submit" disabled={imageLoading}>Save hotel</button>
           <Link to="/hotels">Cancel</Link>
         </div>
       </form>

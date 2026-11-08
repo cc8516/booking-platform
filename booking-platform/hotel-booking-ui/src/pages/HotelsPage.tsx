@@ -15,6 +15,7 @@ export function HotelsPage() {
       <ul className="cards">
         {hotels.map((hotel) => (
           <li key={hotel.id} className="card">
+            {hotel.imageUrl && <img className="card-image" src={hotel.imageUrl} alt={hotel.name} />}
             <h2>{hotel.name}</h2>
             <p className="muted">{hotel.city}, {hotel.country} · ★ {hotel.rating}</p>
             <p>{hotel.description}</p>
