@@ -1,9 +1,17 @@
-import { hotels } from '../data/hotels';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../auth/useAuth';
+import { useHotels } from '../hotels/useHotels';
 
 export function HotelsPage() {
+  const { hotels } = useHotels();
+  const { isAdmin } = useAuth();
+
   return (
     <section>
-      <h1>Hotels</h1>
+      <div className="page-header">
+        <h1>Hotels</h1>
+        {isAdmin && <Link className="button" to="/hotels/new">+ Add hotel</Link>}
+      </div>
       <ul className="cards">
         {hotels.map((hotel) => (
           <li key={hotel.id} className="card">

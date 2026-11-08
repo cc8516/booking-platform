@@ -17,3 +17,9 @@ button:hover, .button:hover { background: #1d4ed8; }
 .muted { color: #6b7280; }
 .error { color: #b91c1c; }
 .status { padding: 2rem; text-align: center; }
+.page-header { display: flex; align-items: center; justify-content: space-between; }
+.badge { background: #dbeafe; color: #1e40af; border-radius: 999px; padding: 0.1rem 0.6rem; font-size: 0.75rem; font-weight: 600; }
+.form { display: grid; gap: 1rem; max-width: 420px; }
+.form label { display: grid; gap: 0.25rem; font-size: 0.9rem; }
+.form input, .form textarea { padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; font: inherit; }
+.form-actions { display: flex; align-items: center; gap: 1rem; }

@@ -2,7 +2,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth';
 
 export function Header() {
-  const { isAuthenticated, session, signIn, signOut } = useAuth();
+  const { isAuthenticated, isAdmin, isHotelManager, session, signIn, signOut } = useAuth();
 
   return (
     <header className="header">
@@ -15,6 +15,8 @@ export function Header() {
         {isAuthenticated ? (
           <>
             <span>{session?.user.email ?? session?.user.username}</span>
+            {isAdmin && <span className="badge">Admin</span>}
+            {isHotelManager && <span className="badge">Hotel Manager</span>}
             <button onClick={signOut}>Sign out</button>
           </>
         ) : (

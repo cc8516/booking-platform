@@ -7,3 +7,5 @@ export interface Hotel {
   rating: number;
   description: string;
 }
+
+export type NewHotel = Omit<Hotel, 'id'>;

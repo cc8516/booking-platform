@@ -26,6 +26,8 @@ Env vars live in `.env` (template: `.env.example`), typed in `src/vite-env.d.ts`
 | `VITE_COGNITO_REDIRECT_URI` | `http://localhost:8080/hotel` — must be in the app client's allowed callback URLs |
 | `VITE_COGNITO_LOGOUT_URI` | `http://localhost:8080/` — must be in allowed sign-out URLs |
 | `VITE_COGNITO_SCOPES` | `openid email profile` |
+| `VITE_COGNITO_ADMIN_GROUP` | Cognito group name that grants Admin (default `Admin`) |
+| `VITE_COGNITO_HOTEL_MANAGER_GROUP` | Cognito group name for Hotel Manager (default `Hotel Manager`) |
 
 Cognito: user pool `us-east-2_i36FtHXmG`, region `us-east-2`. JWKS for backend token validation: `https://cognito-idp.us-east-2.amazonaws.com/us-east-2_i36FtHXmG/.well-known/jwks.json`.
 
@@ -41,9 +43,12 @@ src/
     useAuth.ts             Hook for consuming the context
     ProtectedRoute.tsx     Redirects unauthenticated users to Hosted UI
     types.ts               AuthTokens, AuthUser, AuthSession
-  pages/                   HomePage, HotelsPage, BookingsPage (protected), AuthCallbackPage
+    roles.ts               isAdmin / isHotelManager from `cognito:groups` (id token claim)
+    RoleRoute.tsx          UI guard by role; nest inside ProtectedRoute
+  hotels/                  HotelsProvider (localStorage-backed, temporary), useHotels, context
+  pages/                   HomePage, HotelsPage, AddHotelPage (admin only), BookingsPage (protected), AuthCallbackPage
   components/Header.tsx    Nav + sign in/out
-  data/hotels.ts           Mock hotel data (replace with .NET API)
+  data/hotels.ts           Seed hotel data (replace with .NET API)
   types/hotel.ts           Hotel type
 ```
 
@@ -55,7 +60,11 @@ src/
 4. Session is kept in `sessionStorage` (key `auth_session`) and dropped at expiry. No refresh token with Implicit Grant.
 5. For the backend, send `session.tokens.accessToken` as `Authorization: Bearer …`.
 
-Routes: `/` home, `/hotels` list, `/bookings` (protected), callback path from env (`/hotel`).
+Routes: `/` home, `/hotels` list, `/hotels/new` (Admin group only), `/bookings` (signed in), callback path from env (`/hotel`).
+
+## Roles
+
+Roles come from the id token's `cognito:groups` claim (parsed into `AuthUser.groups`). `useAuth()` exposes `isAdmin` and `isHotelManager`. Admins see "+ Add hotel" on `/hotels` and can open `/hotels/new`. Hotel Manager has no features yet beyond a header badge. These checks are UI-only — the .NET API must enforce groups too. Group changes only take effect after the user signs in again (new token). Hotels added in the UI are stored in `localStorage` until the API exists.
 
 ## Conventions
 
@@ -69,4 +78,5 @@ Routes: `/` home, `/hotels` list, `/bookings` (protected), callback path from en
 
 - Implicit Grant is deprecated for SPAs; consider Authorization Code + PKCE (change is confined to `cognito.ts` and `AuthCallbackPage.tsx`).
 - Tokens are decoded but not signature-verified client-side; the backend must validate them.
-- Booking flow and API client not yet implemented.
+- Booking flow and API client not yet implemented; hotel add is local-only (`HotelsProvider.addHotel` → replace with POST to the API).
+- Hotel Manager role has no permissions defined yet.

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { AuthContext, type AuthContextValue } from './authContext';
 import { buildLoginUrl, buildLogoutUrl, clearSession, loadSession } from './cognito';
+import { isAdmin, isHotelManager } from './roles';
 import type { AuthSession } from './types';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -31,6 +32,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => ({
       session,
       isAuthenticated: session !== null,
+      isAdmin: session ? isAdmin(session.user) : false,
+      isHotelManager: session ? isHotelManager(session.user) : false,
       signIn,
       signOut,
       completeSignIn: setSession,

@@ -11,3 +11,9 @@ export const cognitoConfig = {
   logoutUri: required('VITE_COGNITO_LOGOUT_URI'),
   scopes: required('VITE_COGNITO_SCOPES'),
 } as const;
+
+/** Cognito group names that grant each role (case-sensitive, as shown in the console). */
+export const groupConfig = {
+  admin: required('VITE_COGNITO_ADMIN_GROUP'),
+  hotelManager: required('VITE_COGNITO_HOTEL_MANAGER_GROUP'),
+} as const;
