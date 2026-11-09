@@ -10,7 +10,8 @@
         "dependencies": {
           "Amazon.Lambda.APIGatewayEvents": "3.0.1",
           "Amazon.Lambda.Core": "3.4.0",
-          "Amazon.Lambda.Serialization.SystemTextJson": "3.0.1"
+          "Amazon.Lambda.Serialization.SystemTextJson": "3.0.1",
+          "HttpMultipartParser": "10.0.1"
         },
         "runtime": {
           "HotelMan_HotelAdmin.dll": {}
@@ -42,6 +43,25 @@
             "fileVersion": "0.0.0.0"
           }
         }
+      },
+      "HttpMultipartParser/10.0.1": {
+        "dependencies": {
+          "Microsoft.IO.RecyclableMemoryStream": "3.0.1"
+        },
+        "runtime": {
+          "lib/net8.0/HttpMultipartParser.dll": {
+            "assemblyVersion": "10.0.1.0",
+            "fileVersion": "10.0.1.0"
+          }
+        }
+      },
+      "Microsoft.IO.RecyclableMemoryStream/3.0.1": {
+        "runtime": {
+          "lib/net6.0/Microsoft.IO.RecyclableMemoryStream.dll": {
+            "assemblyVersion": "3.0.1.0",
+            "fileVersion": "3.0.1.0"
+          }
+        }
       }
     }
   },
@@ -71,6 +91,20 @@
       "sha512": "sha512-QsHygaMyxQdgh5NPs5GGyBjK6mqQr5nv8rpqlrWC5+e1k7sVx+2xwDHv493S5IMw461S/PyHfjkUDjIQU5ArSA==",
       "path": "amazon.lambda.serialization.systemtextjson/3.0.1",
       "hashPath": "amazon.lambda.serialization.systemtextjson.3.0.1.nupkg.sha512"
+    },
+    "HttpMultipartParser/10.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-aJsbVkzdCwUfRQoKaivOoLnITza802fmrzXA+RxKbYzxG0Pa/XGQJX3V83qxzMCv4DJrsLGLSPEBFT4KYgG3KQ==",
+      "path": "httpmultipartparser/10.0.1",
+      "hashPath": "httpmultipartparser.10.0.1.nupkg.sha512"
+    },
+    "Microsoft.IO.RecyclableMemoryStream/3.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-s/s20YTVY9r9TPfTrN5g8zPF1YhwxyqO6PxUkrYTGI2B+OGPe9AdajWZrLhFqXIvqIW23fnUE4+ztrUWNU1+9g==",
+      "path": "microsoft.io.recyclablememorystream/3.0.1",
+      "hashPath": "microsoft.io.recyclablememorystream.3.0.1.nupkg.sha512"
     }
   }
 }
