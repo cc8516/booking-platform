@@ -1,0 +1,12 @@
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Debug/net10.0/HotelMan_HotelAdmin.deps.json
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Debug/net10.0/HotelMan_HotelAdmin.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Debug/net10.0/HotelMan_HotelAdmin.pdb
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/obj/Debug/net10.0/HotelMan_HotelAdmin.GeneratedMSBuildEditorConfig.editorconfig
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/obj/Debug/net10.0/HotelMan_HotelAdmin.AssemblyInfoInputs.cache
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/obj/Debug/net10.0/HotelMan_HotelAdmin.AssemblyInfo.cs
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/obj/Debug/net10.0/HotelMan_HotelAdmin.csproj.CoreCompileInputs.cache
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/obj/Debug/net10.0/HotelMan_HotelAdmin.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/obj/Debug/net10.0/refint/HotelMan_HotelAdmin.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/obj/Debug/net10.0/HotelMan_HotelAdmin.pdb
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/obj/Debug/net10.0/ref/HotelMan_HotelAdmin.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/obj/Debug/net10.0/HotelMan_HotelAdmin.csproj.AssemblyReference.cache
