@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { uploadHotelPhoto } from '../api/mockApi';
+import { createHotel } from '../api/mockApi';
+import { useAuth } from '../auth/useAuth';
 import { useHotels } from '../hotels/useHotels';
 import { ACCEPTED_IMAGE_TYPES, processImage } from '../utils/image';
 
@@ -24,7 +25,9 @@ export function AddHotelPage() {
   const [error, setError] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string | undefined>();
   const [imageLoading, setImageLoading] = useState(false);
-  const [apiStatus, setApiStatus] = useState<string | null>(null);
+  const [photoName, setPhotoName] = useState('photo.jpg');
+  const [saving, setSaving] = useState(false);
+  const { session } = useAuth();
 
   const update = (field: keyof FormState) => (e: { target: { value: string } }) =>
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
@@ -35,19 +38,9 @@ export function AddHotelPage() {
     if (!file) return;
     setError(null);
     setImageLoading(true);
-    setApiStatus(null);
     try {
-      const dataUrl = await processImage(file);
-      setImageUrl(dataUrl);
-      // Send the processed photo to the mock API. Failure doesn't block saving.
-      try {
-        const blob = await (await fetch(dataUrl)).blob();
-        const jpegName = file.name.replace(/\.[^.]+$/, '') + '.jpg';
-        const status = await uploadHotelPhoto(blob, jpegName);
-        setApiStatus(`Photo sent to mock API (HTTP ${status}).`);
-      } catch (apiErr) {
-        setApiStatus(`Mock API call failed: ${apiErr instanceof Error ? apiErr.message : 'unknown error'}`);
-      }
+      setImageUrl(await processImage(file));
+      setPhotoName(file.name.replace(/\.[^.]+$/, '') + '.jpg');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not load image.');
     } finally {
@@ -55,7 +48,7 @@ export function AddHotelPage() {
     }
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const price = Number(form.pricePerNight);
     const rating = Number(form.rating);
@@ -66,7 +59,9 @@ export function AddHotelPage() {
     if (!(price > 0)) return setError('Price per night must be greater than 0.');
     if (!(rating >= 0 && rating <= 5)) return setError('Rating must be between 0 and 5.');
 
-    addHotel({
+    if (!session) return setError('You must be signed in to save a hotel.');
+
+    const hotel = {
       name: form.name.trim(),
       city: form.city.trim(),
       country: form.country.trim(),
@@ -74,8 +69,26 @@ export function AddHotelPage() {
       rating,
       description: form.description.trim(),
       imageUrl,
-    });
-    navigate('/hotels');
+    };
+
+    setError(null);
+    setSaving(true);
+    try {
+      const photo = imageUrl ? await (await fetch(imageUrl)).blob() : undefined;
+      await createHotel({
+        hotel,
+        photo,
+        photoFileName: photoName,
+        userId: session.user.sub,
+        idToken: session.tokens.idToken,
+      });
+      addHotel(hotel); // keep the local list in sync until the list is loaded from the API
+      navigate('/hotels');
+    } catch (err) {
+      setError(`Saving to the API failed: ${err instanceof Error ? err.message : 'unknown error'}`);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -97,7 +110,6 @@ export function AddHotelPage() {
         <label>Photo
           <input type="file" accept={ACCEPTED_IMAGE_TYPES.join(',')} onChange={handleImageChange} />
         </label>
-        {apiStatus && <p className="muted">{apiStatus}</p>}
         {imageLoading && <p className="muted">Processing image…</p>}
         {imageUrl && (
           <div className="photo-preview">
@@ -109,7 +121,7 @@ export function AddHotelPage() {
         )}
         {error && <p className="error">{error}</p>}
         <div className="form-actions">
-          <button type="submit" disabled={imageLoading}>Save hotel</button>
+          <button type="submit" disabled={imageLoading || saving}>{saving ? 'Saving…' : 'Save hotel'}</button>
           <Link to="/hotels">Cancel</Link>
         </div>
       </form>

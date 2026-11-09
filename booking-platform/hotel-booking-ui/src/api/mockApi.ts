@@ -1,13 +1,37 @@
 import { mockApiUrl } from '../config/env';
+import type { NewHotel } from '../types/hotel';
+
+export interface CreateHotelRequest {
+  hotel: NewHotel;
+  /** Processed photo, if the admin chose one. */
+  photo?: Blob;
+  photoFileName?: string;
+  userId: string;
+  idToken: string;
+}
 
 /**
- * Sends the hotel photo to the API Gateway mock as multipart/form-data.
+ * Posts a new hotel to the API Gateway mock as multipart/form-data.
  * Do not set Content-Type manually: the browser adds the multipart boundary.
  * Resolves with the HTTP status.
  */
-export async function uploadHotelPhoto(photo: Blob, fileName: string): Promise<number> {
+export async function createHotel({
+  hotel,
+  photo,
+  photoFileName = 'photo.jpg',
+  userId,
+  idToken,
+}: CreateHotelRequest): Promise<number> {
   const form = new FormData();
-  form.append('photo', photo, fileName);
+  form.append('hotelName', hotel.name);
+  form.append('hotelRating', String(hotel.rating));
+  form.append('hotelCity', hotel.city);
+  form.append('hotelCountry', hotel.country);
+  form.append('hotelPrice', String(hotel.pricePerNight));
+  form.append('hotelDescription', hotel.description);
+  if (photo) form.append('photo', photo, photoFileName);
+  form.append('userId', userId);
+  form.append('idToken', idToken);
 
   let response: Response;
   try {

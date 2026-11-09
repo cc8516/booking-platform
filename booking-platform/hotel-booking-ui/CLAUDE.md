@@ -51,7 +51,7 @@ src/
   components/Header.tsx    Nav + sign in/out
   data/hotels.ts           Seed hotel data (replace with .NET API)
   types/hotel.ts           Hotel / NewHotel types (optional `imageUrl`)
-  api/mockApi.ts           uploadHotelPhoto(): POSTs the processed photo as multipart/form-data (field `photo`) to the API Gateway mock (stage Test)
+  api/mockApi.ts           createHotel(): POSTs the new hotel as multipart/form-data to the API Gateway mock (stage Test) when "Save hotel" is clicked. Fields: hotelName, hotelRating, hotelCity, hotelCountry, hotelPrice, hotelDescription, photo (optional), userId (Cognito `sub`), idToken
   utils/image.ts           Validates (JPEG/PNG/WebP, ≤5 MB) and downsizes photos to ≤1024px JPEG data URLs
 ```
 
@@ -83,5 +83,5 @@ Roles come from the id token's `cognito:groups` claim (parsed into `AuthUser.gro
 - Tokens are decoded but not signature-verified client-side; the backend must validate them.
 - Booking flow and API client not yet implemented; hotel add is local-only (`HotelsProvider.addHotel` → replace with POST to the API).
 - Photos live in `localStorage` (~5 MB total quota); a full quota silently stops persisting. Move to S3 (presigned upload URL from the API) with the backend.
-- The API Gateway mock has no CORS headers (OPTIONS returns 403), so until CORS is enabled on the API Gateway resource (allow origin `http://localhost:8080`, methods POST/OPTIONS, deploy to stage Test) the browser delivers the multipart POST but blocks the response, and the form shows a CORS error. The mock accepts unauthenticated POST on `/Test` and returns 200 with an empty body.
+- The API Gateway mock has no CORS headers (OPTIONS returns 403), so until CORS is enabled on the API Gateway resource (allow origin `http://localhost:8080`, methods POST/OPTIONS, deploy to stage Test) the browser delivers the multipart POST but blocks the response, the form shows a CORS error and the hotel is NOT added to the local list (save requires the API call to succeed). The mock accepts unauthenticated POST on `/Test` and returns 200 with an empty body.
 - Hotel Manager role has no permissions defined yet.
