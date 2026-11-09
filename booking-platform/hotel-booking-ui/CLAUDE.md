@@ -28,6 +28,8 @@ Env vars live in `.env` (template: `.env.example`), typed in `src/vite-env.d.ts`
 | `VITE_COGNITO_SCOPES` | `openid email profile` |
 | `VITE_COGNITO_ADMIN_GROUP` | Cognito group name that grants Admin (default `Admin`) |
 | `VITE_MOCK_API_URL` | `https://2dhm3rl6ag.execute-api.us-east-2.amazonaws.com/Test` — API Gateway mock, called directly from the browser |
+| `VITE_API_AUTH_TOKEN` | `id` or `access` — which Cognito token goes in the API `Authorization` header |
+| `VITE_API_AUTH_SCHEME` | `Bearer` (default) or `none` for the raw token (REST API Cognito authorizers) |
 | `VITE_COGNITO_HOTEL_MANAGER_GROUP` | Cognito group name for Hotel Manager (default `Hotel Manager`) |
 
 Cognito: user pool `us-east-2_i36FtHXmG`, region `us-east-2`. JWKS for backend token validation: `https://cognito-idp.us-east-2.amazonaws.com/us-east-2_i36FtHXmG/.well-known/jwks.json`.
@@ -51,7 +53,7 @@ src/
   components/Header.tsx    Nav + sign in/out
   data/hotels.ts           Seed hotel data (replace with .NET API)
   types/hotel.ts           Hotel / NewHotel types (optional `imageUrl`)
-  api/mockApi.ts           createHotel(): POSTs the new hotel as multipart/form-data to the API Gateway mock (stage Test) when "Save hotel" is clicked. Fields: hotelName, hotelRating, hotelCity, hotelCountry, hotelPrice, hotelDescription, photo (optional), userId (Cognito `sub`), idToken
+  api/mockApi.ts           createHotel(): POSTs the new hotel as multipart/form-data with an `Authorization` header (see env) to the API Gateway mock (stage Test) when "Save hotel" is clicked. Fields: hotelName, hotelRating, hotelCity, hotelCountry, hotelPrice, hotelDescription, photo (optional), userId (Cognito `sub`), idToken
   utils/image.ts           Validates (JPEG/PNG/WebP, ≤5 MB) and downsizes photos to ≤1024px JPEG data URLs
 ```
 
@@ -83,5 +85,5 @@ Roles come from the id token's `cognito:groups` claim (parsed into `AuthUser.gro
 - Tokens are decoded but not signature-verified client-side; the backend must validate them.
 - Booking flow and API client not yet implemented; hotel add is local-only (`HotelsProvider.addHotel` → replace with POST to the API).
 - Photos live in `localStorage` (~5 MB total quota); a full quota silently stops persisting. Move to S3 (presigned upload URL from the API) with the backend.
-- The API Gateway mock has no CORS headers (OPTIONS returns 403), so until CORS is enabled on the API Gateway resource (allow origin `http://localhost:8080`, methods POST/OPTIONS, deploy to stage Test) the browser delivers the multipart POST but blocks the response, the form shows a CORS error and the hotel is NOT added to the local list (save requires the API call to succeed). The mock accepts unauthenticated POST on `/Test` and returns 200 with an empty body.
+- The API Gateway mock has no CORS headers (OPTIONS returns 403), so until CORS is enabled on the API Gateway resource (allow origin `http://localhost:8080`, methods POST/OPTIONS, allow header `Authorization`, deploy to stage Test; the Authorization header forces a preflight OPTIONS request) the browser delivers the multipart POST but blocks the response, the form shows a CORS error and the hotel is NOT added to the local list (save requires the API call to succeed). The mock accepts unauthenticated POST on `/Test` and returns 200 with an empty body.
 - Hotel Manager role has no permissions defined yet.

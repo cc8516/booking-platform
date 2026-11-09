@@ -15,6 +15,21 @@ export const cognitoConfig = {
 /** API Gateway mock (stage Test), called directly from the browser (needs CORS enabled on the API). */
 export const mockApiUrl = required('VITE_MOCK_API_URL');
 
+/**
+ * Authorization header settings for API calls.
+ * token: which Cognito token to send ("id" or "access").
+ * scheme: prefix such as "Bearer"; use "none" to send the raw token (what a REST API
+ * Cognito user pool authorizer expects by default).
+ */
+const authToken = required('VITE_API_AUTH_TOKEN');
+if (authToken !== 'id' && authToken !== 'access') {
+  throw new Error('VITE_API_AUTH_TOKEN must be "id" or "access"');
+}
+export const apiAuthConfig = {
+  token: authToken,
+  scheme: required('VITE_API_AUTH_SCHEME'),
+} as const;
+
 /** Cognito group names that grant each role (case-sensitive, as shown in the console). */
 export const groupConfig = {
   admin: required('VITE_COGNITO_ADMIN_GROUP'),

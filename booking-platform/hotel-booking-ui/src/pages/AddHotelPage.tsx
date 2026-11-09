@@ -80,7 +80,7 @@ export function AddHotelPage() {
         photo,
         photoFileName: photoName,
         userId: session.user.sub,
-        idToken: session.tokens.idToken,
+        tokens: session.tokens,
       });
       addHotel(hotel); // keep the local list in sync until the list is loaded from the API
       navigate('/hotels');
