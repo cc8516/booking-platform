@@ -12,6 +12,9 @@ export const cognitoConfig = {
   scopes: required('VITE_COGNITO_SCOPES'),
 } as const;
 
+/** API Gateway mock (stage Test), called directly from the browser (needs CORS enabled on the API). */
+export const mockApiUrl = required('VITE_MOCK_API_URL');
+
 /** Cognito group names that grant each role (case-sensitive, as shown in the console). */
 export const groupConfig = {
   admin: required('VITE_COGNITO_ADMIN_GROUP'),

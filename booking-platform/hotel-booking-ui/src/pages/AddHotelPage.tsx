@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { uploadHotelPhoto } from '../api/mockApi';
 import { useHotels } from '../hotels/useHotels';
 import { ACCEPTED_IMAGE_TYPES, processImage } from '../utils/image';
 
@@ -23,6 +24,7 @@ export function AddHotelPage() {
   const [error, setError] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string | undefined>();
   const [imageLoading, setImageLoading] = useState(false);
+  const [apiStatus, setApiStatus] = useState<string | null>(null);
 
   const update = (field: keyof FormState) => (e: { target: { value: string } }) =>
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
@@ -33,8 +35,19 @@ export function AddHotelPage() {
     if (!file) return;
     setError(null);
     setImageLoading(true);
+    setApiStatus(null);
     try {
-      setImageUrl(await processImage(file));
+      const dataUrl = await processImage(file);
+      setImageUrl(dataUrl);
+      // Send the processed photo to the mock API. Failure doesn't block saving.
+      try {
+        const blob = await (await fetch(dataUrl)).blob();
+        const jpegName = file.name.replace(/\.[^.]+$/, '') + '.jpg';
+        const status = await uploadHotelPhoto(blob, jpegName);
+        setApiStatus(`Photo sent to mock API (HTTP ${status}).`);
+      } catch (apiErr) {
+        setApiStatus(`Mock API call failed: ${apiErr instanceof Error ? apiErr.message : 'unknown error'}`);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not load image.');
     } finally {
@@ -84,6 +97,7 @@ export function AddHotelPage() {
         <label>Photo
           <input type="file" accept={ACCEPTED_IMAGE_TYPES.join(',')} onChange={handleImageChange} />
         </label>
+        {apiStatus && <p className="muted">{apiStatus}</p>}
         {imageLoading && <p className="muted">Processing image…</p>}
         {imageUrl && (
           <div className="photo-preview">

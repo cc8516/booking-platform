@@ -27,6 +27,7 @@ Env vars live in `.env` (template: `.env.example`), typed in `src/vite-env.d.ts`
 | `VITE_COGNITO_LOGOUT_URI` | `http://localhost:8080/` — must be in allowed sign-out URLs |
 | `VITE_COGNITO_SCOPES` | `openid email profile` |
 | `VITE_COGNITO_ADMIN_GROUP` | Cognito group name that grants Admin (default `Admin`) |
+| `VITE_MOCK_API_URL` | `https://2dhm3rl6ag.execute-api.us-east-2.amazonaws.com/Test` — API Gateway mock, called directly from the browser |
 | `VITE_COGNITO_HOTEL_MANAGER_GROUP` | Cognito group name for Hotel Manager (default `Hotel Manager`) |
 
 Cognito: user pool `us-east-2_i36FtHXmG`, region `us-east-2`. JWKS for backend token validation: `https://cognito-idp.us-east-2.amazonaws.com/us-east-2_i36FtHXmG/.well-known/jwks.json`.
@@ -50,6 +51,7 @@ src/
   components/Header.tsx    Nav + sign in/out
   data/hotels.ts           Seed hotel data (replace with .NET API)
   types/hotel.ts           Hotel / NewHotel types (optional `imageUrl`)
+  api/mockApi.ts           uploadHotelPhoto(): POSTs the processed photo as multipart/form-data (field `photo`) to the API Gateway mock (stage Test)
   utils/image.ts           Validates (JPEG/PNG/WebP, ≤5 MB) and downsizes photos to ≤1024px JPEG data URLs
 ```
 
@@ -81,4 +83,5 @@ Roles come from the id token's `cognito:groups` claim (parsed into `AuthUser.gro
 - Tokens are decoded but not signature-verified client-side; the backend must validate them.
 - Booking flow and API client not yet implemented; hotel add is local-only (`HotelsProvider.addHotel` → replace with POST to the API).
 - Photos live in `localStorage` (~5 MB total quota); a full quota silently stops persisting. Move to S3 (presigned upload URL from the API) with the backend.
+- The API Gateway mock has no CORS headers (OPTIONS returns 403), so until CORS is enabled on the API Gateway resource (allow origin `http://localhost:8080`, methods POST/OPTIONS, deploy to stage Test) the browser delivers the multipart POST but blocks the response, and the form shows a CORS error. The mock accepts unauthenticated POST on `/Test` and returns 200 with an empty body.
 - Hotel Manager role has no permissions defined yet.

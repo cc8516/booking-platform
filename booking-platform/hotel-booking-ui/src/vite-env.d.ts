@@ -8,6 +8,7 @@ interface ImportMetaEnv {
   readonly VITE_COGNITO_SCOPES: string;
   readonly VITE_COGNITO_ADMIN_GROUP: string;
   readonly VITE_COGNITO_HOTEL_MANAGER_GROUP: string;
+  readonly VITE_MOCK_API_URL: string;
 }
 
 interface ImportMeta {
