@@ -46,11 +46,6 @@ public class HotelAdmin
         var hotelDescription = formData.GetParameterValue("hotelDescription");
 
         var file = formData.Files.FirstOrDefault();
-        var fileName = file?.FileName;
-
-        await using var fileContentStream = new MemoryStream();
-        await file.Data.CopyToAsync(fileContentStream);
-        fileContentStream.Position = 0;
 
         var userId = formData.GetParameterValue("userId");
         var idToken = formData.GetParameterValue("idToken");
@@ -63,6 +58,19 @@ public class HotelAdmin
             response.Body = JsonSerializer.Serialize(new { Error = "Unauthorized: User is not an admin" });
             return response;
         }
+
+        if (file == null)
+        {
+            response.StatusCode = (int)HttpStatusCode.BadRequest;
+            response.Body = JsonSerializer.Serialize(new { Error = "Hotel image file is required" });
+            return response;
+        }
+
+        var fileName = file.FileName;
+
+        await using var fileContentStream = new MemoryStream();
+        await file.Data.CopyToAsync(fileContentStream);
+        fileContentStream.Position = 0;
 
         context.Logger.LogInformation(
             $"Hotel: {hotelName}, {hotelCity}, {hotelCountry}, rating {hotelRatingText}, price {hotelPriceText}, description: {hotelDescription}");

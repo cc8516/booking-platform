@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v10.0": {
       "HotelMan_HotelAdmin/1.0.0": {
         "dependencies": {
+          "AWSSDK.S3": "4.0.104.11",
           "Amazon.Lambda.APIGatewayEvents": "3.0.1",
           "Amazon.Lambda.Core": "3.4.0",
           "Amazon.Lambda.Serialization.SystemTextJson": "3.0.1",
@@ -42,6 +43,25 @@
           "lib/net10.0/Amazon.Lambda.Serialization.SystemTextJson.dll": {
             "assemblyVersion": "0.0.0.0",
             "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "AWSSDK.Core/4.0.102.19": {
+        "runtime": {
+          "lib/net8.0/AWSSDK.Core.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.102.19"
+          }
+        }
+      },
+      "AWSSDK.S3/4.0.104.11": {
+        "dependencies": {
+          "AWSSDK.Core": "4.0.102.19"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.S3.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.104.11"
           }
         }
       },
@@ -174,6 +194,20 @@
       "sha512": "sha512-QsHygaMyxQdgh5NPs5GGyBjK6mqQr5nv8rpqlrWC5+e1k7sVx+2xwDHv493S5IMw461S/PyHfjkUDjIQU5ArSA==",
       "path": "amazon.lambda.serialization.systemtextjson/3.0.1",
       "hashPath": "amazon.lambda.serialization.systemtextjson.3.0.1.nupkg.sha512"
+    },
+    "AWSSDK.Core/4.0.102.19": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Hb6P2ui6y0U+UNUjcC4ASFFoTLzCijhMzfOCXfoFTXq/o0YWQsO1oSH1NG2GQ9dlIT693xeeih0yAcfeL1dphg==",
+      "path": "awssdk.core/4.0.102.19",
+      "hashPath": "awssdk.core.4.0.102.19.nupkg.sha512"
+    },
+    "AWSSDK.S3/4.0.104.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-leP2ZC3gVaNHXZleKOMHmedex6fTrr6u1ZQFuezIGjT01oPwP0j6YI00jlPwlakTC0Uo5a0eOOY2Q/eYzsU9wg==",
+      "path": "awssdk.s3/4.0.104.11",
+      "hashPath": "awssdk.s3.4.0.104.11.nupkg.sha512"
     },
     "HttpMultipartParser/10.0.1": {
       "type": "package",
