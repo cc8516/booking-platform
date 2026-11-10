@@ -5,3 +5,16 @@
 /Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Release/net10.0/publish/Amazon.Lambda.APIGatewayEvents.dll
 /Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Release/net10.0/publish/Amazon.Lambda.Core.dll
 /Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Release/net10.0/publish/Amazon.Lambda.Serialization.SystemTextJson.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Release/net10.0/publish/AWSSDK.Core.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Release/net10.0/publish/AWSSDK.DynamoDBv2.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Release/net10.0/publish/AWSSDK.S3.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Release/net10.0/publish/HttpMultipartParser.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Release/net10.0/publish/Microsoft.Bcl.Cryptography.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Release/net10.0/publish/Microsoft.Extensions.DependencyInjection.Abstractions.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Release/net10.0/publish/Microsoft.Extensions.Logging.Abstractions.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Release/net10.0/publish/Microsoft.IdentityModel.Abstractions.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Release/net10.0/publish/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Release/net10.0/publish/Microsoft.IdentityModel.Logging.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Release/net10.0/publish/Microsoft.IdentityModel.Tokens.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Release/net10.0/publish/Microsoft.IO.RecyclableMemoryStream.dll
+/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/bin/Release/net10.0/publish/System.IdentityModel.Tokens.Jwt.dll
