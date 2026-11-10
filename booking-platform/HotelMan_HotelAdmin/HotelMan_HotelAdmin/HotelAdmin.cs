@@ -1,4 +1,6 @@
 ﻿using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using Amazon.Lambda.APIGatewayEvents;
@@ -57,7 +59,7 @@ public class HotelAdmin
         }
 
         context.Logger.LogInformation(
-            $"Hotel: {hotelName}, {hotelCity}, {hotelCountry}, rating {hotelRating}, price {hotelPrice}, description: {hotelDescription}");
+            $"Hotel: {hotelName}, {hotelCity}, {hotelCountry}, rating {hotelRatingText}, price {hotelPriceText}, description: {hotelDescription}");
 
         return response;
     }

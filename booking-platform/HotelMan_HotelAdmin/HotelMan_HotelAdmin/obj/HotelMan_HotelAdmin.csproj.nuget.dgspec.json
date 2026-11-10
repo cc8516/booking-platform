@@ -61,6 +61,10 @@
             "HttpMultipartParser": {
               "target": "Package",
               "version": "[10.0.1, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.23.0, )"
             }
           },
           "imports": [
