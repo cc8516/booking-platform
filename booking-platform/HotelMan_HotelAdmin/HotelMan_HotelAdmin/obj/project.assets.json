@@ -57,6 +57,22 @@
           }
         }
       },
+      "AWSSDK.DynamoDBv2/4.0.110.2": {
+        "type": "package",
+        "dependencies": {
+          "AWSSDK.Core": "[4.0.102.19, 5.0.0)"
+        },
+        "compile": {
+          "lib/net8.0/AWSSDK.DynamoDBv2.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.DynamoDBv2.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "AWSSDK.S3/4.0.104.11": {
         "type": "package",
         "dependencies": {
@@ -306,6 +322,32 @@
         "lib/netstandard2.0/AWSSDK.Core.dll",
         "lib/netstandard2.0/AWSSDK.Core.xml",
         "tools/account-management.ps1"
+      ]
+    },
+    "AWSSDK.DynamoDBv2/4.0.110.2": {
+      "sha512": "7iX/ajll26r4C5RaJFrGavg7NTER6b4JMK8gZCx2qHfWVpokrphFL5D7llAz9PuTeqZDbNzzyIIZB2Clyi1PqQ==",
+      "type": "package",
+      "path": "awssdk.dynamodbv2/4.0.110.2",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "analyzers/dotnet/cs/AWSSDK.DynamoDBv2.CodeAnalysis.dll",
+        "analyzers/dotnet/cs/SharedAnalysisCode.dll",
+        "awssdk.dynamodbv2.4.0.110.2.nupkg.sha512",
+        "awssdk.dynamodbv2.nuspec",
+        "images/AWSLogo.png",
+        "lib/net472/AWSSDK.DynamoDBv2.dll",
+        "lib/net472/AWSSDK.DynamoDBv2.xml",
+        "lib/net8.0/AWSSDK.DynamoDBv2.dll",
+        "lib/net8.0/AWSSDK.DynamoDBv2.xml",
+        "lib/netcoreapp3.1/AWSSDK.DynamoDBv2.dll",
+        "lib/netcoreapp3.1/AWSSDK.DynamoDBv2.xml",
+        "lib/netstandard2.0/AWSSDK.DynamoDBv2.dll",
+        "lib/netstandard2.0/AWSSDK.DynamoDBv2.xml",
+        "nuget-readme.md",
+        "tools/install.ps1",
+        "tools/uninstall.ps1"
       ]
     },
     "AWSSDK.S3/4.0.104.11": {
@@ -636,6 +678,7 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
+      "AWSSDK.DynamoDBv2 >= 4.0.110.2",
       "AWSSDK.S3 >= 4.0.104.11",
       "Amazon.Lambda.APIGatewayEvents >= 3.0.1",
       "Amazon.Lambda.Core >= 3.4.0",
@@ -689,6 +732,10 @@
         "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
+          "AWSSDK.DynamoDBv2": {
+            "target": "Package",
+            "version": "[4.0.110.2, )"
+          },
           "AWSSDK.S3": {
             "target": "Package",
             "version": "[4.0.104.11, )"

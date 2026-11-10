@@ -4,9 +4,12 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using Amazon;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Amazon.S3;
+using HotelMan_HotelAdmin.Models;
 using HttpMultipartParser;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -79,16 +82,44 @@ public class HotelAdmin
         var bucketName = Environment.GetEnvironmentVariable("bucketName");
 
         var client = new AmazonS3Client(RegionEndpoint.GetBySystemName(region));
+        var dbClient = new AmazonDynamoDBClient(RegionEndpoint.GetBySystemName(region));
         
-        await client.PutObjectAsync(new Amazon.S3.Model.PutObjectRequest
+        try
         {
-            BucketName = bucketName,
-            Key = fileName,
-            InputStream = fileContentStream,
-            AutoCloseStream = true
-        });
+            await client.PutObjectAsync(new Amazon.S3.Model.PutObjectRequest
+            {
+                BucketName = bucketName,
+                Key = fileName,
+                InputStream = fileContentStream,
+                AutoCloseStream = true
+            });
 
+            var hotel = new Hotel
+            {
+                UserId = userId,
+                Id = Guid.NewGuid().ToString(),
+                Name = hotelName,
+                City = hotelCity,
+                Country = hotelCountry,
+                Description = hotelDescription,
+                Rating = int.Parse(hotelRatingText, CultureInfo.InvariantCulture),
+                Price = decimal.Parse(hotelPriceText, CultureInfo.InvariantCulture),
+                FileName = fileName
+            };
 
+            using var dbContext = new DynamoDBContextBuilder()
+                .WithDynamoDBClient(() => dbClient)
+                .Build();
+            await dbContext.SaveAsync(hotel);
+        }
+        catch (Exception ex)
+        {
+            context.Logger.LogError($"Error uploading file to S3: {ex.Message}");
+            response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            response.Body = JsonSerializer.Serialize(new { Error = "Error uploading file to S3" });
+            return response;
+        }
+        
         return response;
     }
 }

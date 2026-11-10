@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "MJXoGmadqjs=",
+  "dgSpecHash": "hmaqwKzIx+s=",
   "success": true,
   "projectFilePath": "/Users/connorchoi/Dropbox/Mac/Downloads/Claude/booking-platform/HotelMan_HotelAdmin/HotelMan_HotelAdmin/HotelMan_HotelAdmin.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "/Users/connorchoi/.nuget/packages/amazon.lambda.core/3.4.0/amazon.lambda.core.3.4.0.nupkg.sha512",
     "/Users/connorchoi/.nuget/packages/amazon.lambda.serialization.systemtextjson/3.0.1/amazon.lambda.serialization.systemtextjson.3.0.1.nupkg.sha512",
     "/Users/connorchoi/.nuget/packages/awssdk.core/4.0.102.19/awssdk.core.4.0.102.19.nupkg.sha512",
+    "/Users/connorchoi/.nuget/packages/awssdk.dynamodbv2/4.0.110.2/awssdk.dynamodbv2.4.0.110.2.nupkg.sha512",
     "/Users/connorchoi/.nuget/packages/awssdk.s3/4.0.104.11/awssdk.s3.4.0.104.11.nupkg.sha512",
     "/Users/connorchoi/.nuget/packages/httpmultipartparser/10.0.1/httpmultipartparser.10.0.1.nupkg.sha512",
     "/Users/connorchoi/.nuget/packages/microsoft.bcl.cryptography/10.0.2/microsoft.bcl.cryptography.10.0.2.nupkg.sha512",
