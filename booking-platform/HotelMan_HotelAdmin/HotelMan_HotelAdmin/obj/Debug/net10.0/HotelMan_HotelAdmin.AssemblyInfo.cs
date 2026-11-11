@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HotelMan_HotelAdmin")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bb4f45c38a94954bfc3111dd6b29347445888f3a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f16e97f8e0fcc3cbe6790b35b47750cc6374ac74")]
 [assembly: System.Reflection.AssemblyProductAttribute("HotelMan_HotelAdmin")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HotelMan_HotelAdmin")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
