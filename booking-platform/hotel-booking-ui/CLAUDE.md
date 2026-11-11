@@ -27,7 +27,7 @@ Env vars live in `.env` (template: `.env.example`), typed in `src/vite-env.d.ts`
 | `VITE_COGNITO_LOGOUT_URI` | `http://localhost:8080/` — must be in allowed sign-out URLs |
 | `VITE_COGNITO_SCOPES` | `openid email profile` |
 | `VITE_COGNITO_ADMIN_GROUP` | Cognito group name that grants Admin (default `Admin`) |
-| `VITE_MOCK_API_URL` | `https://2dhm3rl6ag.execute-api.us-east-2.amazonaws.com/Test` — API Gateway mock, called directly from the browser |
+| `VITE_MOCK_API_URL` | `https://2dhm3rl6ag.execute-api.us-east-2.amazonaws.com/Test/admin` — API Gateway stage Test, resource `/{admin+}` (greedy proxy), called directly from the browser |
 | `VITE_API_AUTH_TOKEN` | `id` or `access` — which Cognito token goes in the API `Authorization` header |
 | `VITE_API_AUTH_SCHEME` | `Bearer` (default) or `none` for the raw token (REST API Cognito authorizers) |
 | `VITE_COGNITO_HOTEL_MANAGER_GROUP` | Cognito group name for Hotel Manager (default `Hotel Manager`) |

@@ -6,6 +6,7 @@ using System.Text.Json;
 using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Amazon.S3;
@@ -18,6 +19,38 @@ namespace HotelMan_HotelAdmin;
 
 public class HotelAdmin
 {
+    public async Task<APIGatewayProxyResponse> ListHotels(APIGatewayProxyRequest request, ILambdaContext context)
+    {
+        var response = new APIGatewayProxyResponse
+        {
+            Headers = new Dictionary<string, string>
+            {
+                // { "Content-Type", "application/json" },
+                { "Access-Control-Allow-Origin", "http://localhost:8080" },
+                { "Access-Control-Allow-Headers", "Content-Type,Authorization" },
+                { "Access-Control-Allow-Methods", "POST,OPTIONS" },
+                { "Content-Type", "application/json" }
+            },
+            StatusCode = 200,
+        };
+
+        var token = request.QueryStringParameters["token"];
+        var tokenDetails = new JwtSecurityToken(token);
+        var userId = tokenDetails.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+
+        var region = Environment.GetEnvironmentVariable("AWS_REGION");
+        var dbClient = new AmazonDynamoDBClient(RegionEndpoint.GetBySystemName(region));
+        using var dbContext = new DynamoDBContextBuilder()
+            .WithDynamoDBClient(() => dbClient)
+            .Build();
+
+        var hotels = await dbContext.ScanAsync<Hotel>(new List<ScanCondition> { new ScanCondition("UserId", ScanOperator.Equal, userId) }).GetRemainingAsync(); 
+
+        response.Body = JsonSerializer.Serialize(hotels);
+        
+        return response;
+    }
+    
     public async Task<APIGatewayProxyResponse> AddHotel(APIGatewayProxyRequest request, ILambdaContext context)
     {
         Console.WriteLine("Ok.");
