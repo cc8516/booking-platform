@@ -137,6 +137,7 @@ public class HotelAdmin
                 BucketName = bucketName,
                 Key = fileName,
                 InputStream = fileContentStream,
+                ContentType = file.ContentType,
                 AutoCloseStream = true
             });
 
