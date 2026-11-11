@@ -1,34 +1,41 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { hotels as seedHotels } from '../data/hotels';
+import { fetchHotels } from '../api/hotelsApi';
+import { useAuth } from '../auth/useAuth';
 import type { Hotel, NewHotel } from '../types/hotel';
 import { HotelsContext, type HotelsContextValue } from './hotelsContext';
 
-const STORAGE_KEY = 'hotels';
-
-function loadHotels(): Hotel[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw) as Hotel[];
-  } catch {
-    /* fall through to seed data */
-  }
-  return seedHotels;
-}
-
-/**
- * Temporary store: hotels persist in localStorage until the .NET API exists.
- * Replace addHotel with an API call (POST /hotels) when the backend is ready.
- */
+/** Loads hotels (with image URLs) from the API for the signed-in user. */
 export function HotelsProvider({ children }: { children: ReactNode }) {
-  const [hotels, setHotels] = useState<Hotel[]>(loadHotels);
+  const { session } = useAuth();
+  const tokens = session?.tokens ?? null;
+  const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(hotels));
-    } catch {
-      /* storage unavailable; keep in-memory only */
+    if (!tokens) {
+      setHotels([]);
+      setError(null);
+      return;
     }
-  }, [hotels]);
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+    fetchHotels(tokens)
+      .then((list) => {
+        if (!cancelled) setHotels(list);
+      })
+      .catch((e: unknown) => {
+        if (!cancelled) setError(e instanceof Error ? e.message : 'Failed to load hotels');
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [tokens, reloadKey]);
 
   const addHotel = useCallback((input: NewHotel): Hotel => {
     const hotel: Hotel = { ...input, id: crypto.randomUUID() };
@@ -36,6 +43,11 @@ export function HotelsProvider({ children }: { children: ReactNode }) {
     return hotel;
   }, []);
 
-  const value = useMemo<HotelsContextValue>(() => ({ hotels, addHotel }), [hotels, addHotel]);
+  const refresh = useCallback(() => setReloadKey((k) => k + 1), []);
+
+  const value = useMemo<HotelsContextValue>(
+    () => ({ hotels, loading, error, addHotel, refresh }),
+    [hotels, loading, error, addHotel, refresh],
+  );
   return <HotelsContext.Provider value={value}>{children}</HotelsContext.Provider>;
 }

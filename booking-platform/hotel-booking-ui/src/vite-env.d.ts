@@ -9,6 +9,8 @@ interface ImportMetaEnv {
   readonly VITE_COGNITO_ADMIN_GROUP: string;
   readonly VITE_COGNITO_HOTEL_MANAGER_GROUP: string;
   readonly VITE_MOCK_API_URL: string;
+  readonly VITE_HOTELS_API_URL: string;
+  readonly VITE_HOTEL_IMAGES_BASE_URL?: string;
   readonly VITE_API_AUTH_TOKEN: string;
   readonly VITE_API_AUTH_SCHEME: string;
 }

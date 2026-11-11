@@ -46,6 +46,19 @@ public class HotelAdmin
 
         var hotels = await dbContext.ScanAsync<Hotel>(new List<ScanCondition> { new ScanCondition("UserId", ScanOperator.Equal, userId) }).GetRemainingAsync(); 
 
+        var bucketName = Environment.GetEnvironmentVariable("bucketName");
+        var s3Client = new AmazonS3Client(RegionEndpoint.GetBySystemName(region));
+        foreach (var hotel in hotels.Where(h => !string.IsNullOrEmpty(h.FileName)))
+        {
+            hotel.ImageUrl = s3Client.GetPreSignedURL(new Amazon.S3.Model.GetPreSignedUrlRequest
+            {
+                BucketName = bucketName,
+                Key = hotel.FileName,
+                Verb = HttpVerb.GET,
+                Expires = DateTime.UtcNow.AddHours(1)
+            });
+        }
+
         response.Body = JsonSerializer.Serialize(hotels);
         
         return response;

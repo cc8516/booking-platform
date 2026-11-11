@@ -15,6 +15,10 @@ export const cognitoConfig = {
 /** API Gateway mock (stage Test), called directly from the browser (needs CORS enabled on the API). */
 export const mockApiUrl = required('VITE_MOCK_API_URL');
 
+/** Hotels list API (GET ?token=<idToken>) and optional public base URL for hotel images in S3. */
+export const hotelsApiUrl = required('VITE_HOTELS_API_URL');
+export const hotelImagesBaseUrl = (import.meta.env.VITE_HOTEL_IMAGES_BASE_URL ?? '').replace(/\/$/, '');
+
 /**
  * Authorization header settings for API calls.
  * token: which Cognito token to send ("id" or "access").

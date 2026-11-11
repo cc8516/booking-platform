@@ -32,5 +32,9 @@ namespace HotelMan_HotelAdmin.Models
         // S3 object key of the uploaded hotel image
         [DynamoDBProperty("fileName")]
         public string FileName { get; set; } = string.Empty;
+
+        // Presigned S3 URL for the image; computed on read, not stored in DynamoDB
+        [DynamoDBIgnore]
+        public string ImageUrl { get; set; } = string.Empty;
     }
 }

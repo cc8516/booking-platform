@@ -3,8 +3,8 @@ import { useAuth } from '../auth/useAuth';
 import { useHotels } from '../hotels/useHotels';
 
 export function HotelsPage() {
-  const { hotels } = useHotels();
-  const { isAdmin } = useAuth();
+  const { hotels, loading, error } = useHotels();
+  const { isAdmin, isAuthenticated } = useAuth();
 
   return (
     <section>
@@ -12,6 +12,9 @@ export function HotelsPage() {
         <h1>Hotels</h1>
         {isAdmin && <Link className="button" to="/hotels/new">+ Add hotel</Link>}
       </div>
+      {!isAuthenticated && <p className="muted">Sign in to see hotels.</p>}
+      {loading && <p className="muted">Loading hotels…</p>}
+      {error && <p role="alert">Could not load hotels: {error}</p>}
       <ul className="cards">
         {hotels.map((hotel) => (
           <li key={hotel.id} className="card">

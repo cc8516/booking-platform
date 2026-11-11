@@ -28,6 +28,8 @@ Env vars live in `.env` (template: `.env.example`), typed in `src/vite-env.d.ts`
 | `VITE_COGNITO_SCOPES` | `openid email profile` |
 | `VITE_COGNITO_ADMIN_GROUP` | Cognito group name that grants Admin (default `Admin`) |
 | `VITE_MOCK_API_URL` | `https://2dhm3rl6ag.execute-api.us-east-2.amazonaws.com/Test/admin` — API Gateway stage Test, resource `/{admin+}` (greedy proxy), called directly from the browser |
+| `VITE_HOTELS_API_URL` | `https://hgipqkz4z3.execute-api.us-east-2.amazonaws.com/Test` — hotels list endpoint, `GET ?token=<idToken>` |
+| `VITE_HOTEL_IMAGES_BASE_URL` | Optional public S3/CDN base URL; image URL = base + `/` + hotel `fileName`. Empty = no images shown |
 | `VITE_API_AUTH_TOKEN` | `id` or `access` — which Cognito token goes in the API `Authorization` header |
 | `VITE_API_AUTH_SCHEME` | `Bearer` (default) or `none` for the raw token (REST API Cognito authorizers) |
 | `VITE_COGNITO_HOTEL_MANAGER_GROUP` | Cognito group name for Hotel Manager (default `Hotel Manager`) |
@@ -48,11 +50,11 @@ src/
     types.ts               AuthTokens, AuthUser, AuthSession
     roles.ts               isAdmin / isHotelManager from `cognito:groups` (id token claim)
     RoleRoute.tsx          UI guard by role; nest inside ProtectedRoute
-  hotels/                  HotelsProvider (localStorage-backed, temporary), useHotels, context
+  hotels/                  HotelsProvider (loads hotels from the API for the signed-in user), useHotels, context
   pages/                   HomePage, HotelsPage, AddHotelPage (admin only), BookingsPage (protected), AuthCallbackPage
   components/Header.tsx    Nav + sign in/out
-  data/hotels.ts           Seed hotel data (replace with .NET API)
   types/hotel.ts           Hotel / NewHotel types (optional `imageUrl`)
+  api/hotelsApi.ts         fetchHotels(): GET hotels list with `?token=<idToken>`; maps backend fields (Name, City, Country, Description, Rating, Price, FileName) to `Hotel`, uses the API's presigned `ImageUrl` (fallback: `VITE_HOTEL_IMAGES_BASE_URL` + `fileName`)
   api/mockApi.ts           createHotel(): POSTs the new hotel as multipart/form-data with an `Authorization` header (see env) to the API Gateway mock (stage Test) when "Save hotel" is clicked. Fields: hotelName, hotelRating, hotelCity, hotelCountry, hotelPrice, hotelDescription, photo (optional), userId (Cognito `sub`), idToken
   utils/image.ts           Validates (JPEG/PNG/WebP, ≤5 MB) and downsizes photos to ≤1024px JPEG data URLs
 ```
@@ -69,7 +71,7 @@ Routes: `/` home, `/hotels` list, `/hotels/new` (Admin group only), `/bookings` 
 
 ## Roles
 
-Roles come from the id token's `cognito:groups` claim (parsed into `AuthUser.groups`). `useAuth()` exposes `isAdmin` and `isHotelManager`. Admins see "+ Add hotel" on `/hotels` and can open `/hotels/new`. Hotel Manager has no features yet beyond a header badge. These checks are UI-only — the .NET API must enforce groups too. Group changes only take effect after the user signs in again (new token). Hotels added in the UI (including their photo, stored as a downsized data URL) are kept in `localStorage` until the API exists.
+Roles come from the id token's `cognito:groups` claim (parsed into `AuthUser.groups`). `useAuth()` exposes `isAdmin` and `isHotelManager`. Admins see "+ Add hotel" on `/hotels` and can open `/hotels/new`. Hotel Manager has no features yet beyond a header badge. These checks are UI-only — the .NET API must enforce groups too. Group changes only take effect after the user signs in again (new token). The hotels list is fetched from the API when signed in (empty otherwise); a hotel added in the UI is appended locally (with its photo as a data URL) until the next load.
 
 ## Conventions
 
@@ -83,7 +85,7 @@ Roles come from the id token's `cognito:groups` claim (parsed into `AuthUser.gro
 
 - Implicit Grant is deprecated for SPAs; consider Authorization Code + PKCE (change is confined to `cognito.ts` and `AuthCallbackPage.tsx`).
 - Tokens are decoded but not signature-verified client-side; the backend must validate them.
-- Booking flow and API client not yet implemented; hotel add is local-only (`HotelsProvider.addHotel` → replace with POST to the API).
-- Photos live in `localStorage` (~5 MB total quota); a full quota silently stops persisting. Move to S3 (presigned upload URL from the API) with the backend.
+- Booking flow and API client not yet implemented; the list is read from the API but the backend only returns the signed-in user's hotels (it scans by `UserId`).
+- `ListHotels` returns a presigned S3 GET `ImageUrl` per hotel (valid 1 h; the Lambda needs `bucketName` env var and S3 read permission). Images in the list expire after an hour until it is reloaded. The list endpoint (REST API `ListAdminHotels`, Lambda proxy, no authorizer, `token` query param) is a simple GET with no custom headers, so no preflight; the Lambda's `Access-Control-Allow-Origin: http://localhost:8080` is enough. It does not verify the JWT signature, so anyone can read any user's hotels by forging a token.
 - The API Gateway mock has no CORS headers (OPTIONS returns 403), so until CORS is enabled on the API Gateway resource (allow origin `http://localhost:8080`, methods POST/OPTIONS, allow header `Authorization`, deploy to stage Test; the Authorization header forces a preflight OPTIONS request) the browser delivers the multipart POST but blocks the response, the form shows a CORS error and the hotel is NOT added to the local list (save requires the API call to succeed). The mock accepts unauthenticated POST on `/Test` and returns 200 with an empty body.
 - Hotel Manager role has no permissions defined yet.
