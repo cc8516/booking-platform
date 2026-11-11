@@ -25,7 +25,7 @@ export function AddHotelPage() {
   const [error, setError] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string | undefined>();
   const [imageLoading, setImageLoading] = useState(false);
-  const [photoName, setPhotoName] = useState('photo.jpg');
+  const [photoFile, setPhotoFile] = useState<File | undefined>();
   const [saving, setSaving] = useState(false);
   const { session } = useAuth();
 
@@ -40,7 +40,7 @@ export function AddHotelPage() {
     setImageLoading(true);
     try {
       setImageUrl(await processImage(file));
-      setPhotoName(file.name.replace(/\.[^.]+$/, '') + '.jpg');
+      setPhotoFile(file); // the original file is uploaded; imageUrl is only the downsized preview
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not load image.');
     } finally {
@@ -74,11 +74,10 @@ export function AddHotelPage() {
     setError(null);
     setSaving(true);
     try {
-      const photo = imageUrl ? await (await fetch(imageUrl)).blob() : undefined;
       await createHotel({
         hotel,
-        photo,
-        photoFileName: photoName,
+        photo: photoFile,
+        photoFileName: photoFile?.name,
         userId: session.user.sub,
         tokens: session.tokens,
       });

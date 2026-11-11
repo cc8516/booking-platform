@@ -55,7 +55,7 @@ src/
   components/Header.tsx    Nav + sign in/out
   types/hotel.ts           Hotel / NewHotel types (optional `imageUrl`)
   api/hotelsApi.ts         fetchHotels(): GET hotels list with `?token=<idToken>`; maps backend fields (Name, City, Country, Description, Rating, Price, FileName) to `Hotel`, uses the API's presigned `ImageUrl` (fallback: `VITE_HOTEL_IMAGES_BASE_URL` + `fileName`)
-  api/mockApi.ts           createHotel(): POSTs the new hotel as multipart/form-data with an `Authorization` header (see env) to the API Gateway mock (stage Test) when "Save hotel" is clicked. Fields: hotelName, hotelRating, hotelCity, hotelCountry, hotelPrice, hotelDescription, photo (optional), userId (Cognito `sub`), idToken
+  api/mockApi.ts           createHotel(): POSTs the new hotel as multipart/form-data with an `Authorization` header (see env) to the API Gateway mock (stage Test) when "Save hotel" is clicked. Fields: hotelName, hotelRating, hotelCity, hotelCountry, hotelPrice, hotelDescription, photo (optional, the original unmodified file), userId (Cognito `sub`), idToken
   utils/image.ts           Validates (JPEG/PNG/WebP, ≤5 MB) and downsizes photos to ≤1024px JPEG data URLs
 ```
 
