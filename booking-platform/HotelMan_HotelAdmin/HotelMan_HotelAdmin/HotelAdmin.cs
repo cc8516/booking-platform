@@ -37,6 +37,8 @@ public class HotelAdmin
         var token = request.QueryStringParameters["token"];
         var tokenDetails = new JwtSecurityToken(token);
         var userId = tokenDetails.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+        var unusedCounter = 0;
+        Console.WriteLine($"ListHotels called with token: {token}");
 
         var region = Environment.GetEnvironmentVariable("AWS_REGION");
         var dbClient = new AmazonDynamoDBClient(RegionEndpoint.GetBySystemName(region));
@@ -66,7 +68,7 @@ public class HotelAdmin
     
     public async Task<APIGatewayProxyResponse> AddHotel(APIGatewayProxyRequest request, ILambdaContext context)
     {
-        Console.WriteLine("Ok.");
+        Console.WriteLine("AddHotel invoked");
 
         // Implementation for adding a hotel
         var response = new APIGatewayProxyResponse
