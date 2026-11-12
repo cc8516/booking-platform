@@ -126,6 +126,8 @@ public class HotelAdmin
         context.Logger.LogInformation(
             $"Hotel: {hotelName}, {hotelCity}, {hotelCountry}, rating {hotelRatingText}, price {hotelPriceText}, description: {hotelDescription}");
 
+        context.Logger.LogInformation($"Add hotel request from user {userId} with token {idToken}");
+
         var region = Environment.GetEnvironmentVariable("AWS_REGION");
         var bucketName = Environment.GetEnvironmentVariable("bucketName");
 
