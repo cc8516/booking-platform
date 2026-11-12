@@ -1,0 +1,13 @@
+# .NET build output and packaged Lambda zips
+bin/
+obj/
+*.zip
+.vs/
+
+# Local environment (copy hotel-booking-ui/.env.example to .env)
+.env
+
+# Claude Code local settings
+.claude/settings.local.json
+
+.DS_Store
