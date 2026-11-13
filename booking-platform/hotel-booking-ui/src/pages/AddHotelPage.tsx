@@ -113,7 +113,10 @@ export function AddHotelPage() {
         {imageUrl && (
           <div className="photo-preview">
             <img src={imageUrl} alt="Hotel preview" />
-            <button type="button" className="secondary" onClick={() => setImageUrl(undefined)}>
+            <button type="button" className="secondary" onClick={() => {
+                setImageUrl(undefined);
+                setPhotoFile(undefined); // otherwise the removed photo would still be uploaded
+              }}>
               Remove photo
             </button>
           </div>
