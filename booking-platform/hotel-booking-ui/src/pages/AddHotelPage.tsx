@@ -60,6 +60,7 @@ export function AddHotelPage() {
     if (!(rating >= 0 && rating <= 5)) return setError('Rating must be between 0 and 5.');
 
     if (!session) return setError('You must be signed in to save a hotel.');
+    if (!photoFile) return setError('Please choose a photo.'); // the API requires an image
 
     const hotel = {
       name: form.name.trim(),
@@ -113,7 +114,10 @@ export function AddHotelPage() {
         {imageUrl && (
           <div className="photo-preview">
             <img src={imageUrl} alt="Hotel preview" />
-            <button type="button" className="secondary" onClick={() => setImageUrl(undefined)}>
+            <button type="button" className="secondary" onClick={() => {
+                setImageUrl(undefined);
+                setPhotoFile(undefined); // otherwise the removed photo would still be uploaded
+              }}>
               Remove photo
             </button>
           </div>
