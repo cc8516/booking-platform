@@ -60,6 +60,7 @@ export function AddHotelPage() {
     if (!(rating >= 0 && rating <= 5)) return setError('Rating must be between 0 and 5.');
 
     if (!session) return setError('You must be signed in to save a hotel.');
+    if (!photoFile) return setError('Please choose a photo.'); // the API requires an image
 
     const hotel = {
       name: form.name.trim(),
