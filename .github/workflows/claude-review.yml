@@ -4,8 +4,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
-      - 'HotelMan_HotelAdmin/**'
-      - 'hotel-booking-ui/src/**'
+      - 'booking-platform/HotelMan_HotelAdmin/**'
+      - 'booking-platform/hotel-booking-ui/src/**'
       - '.github/workflows/**'
 
 jobs:
